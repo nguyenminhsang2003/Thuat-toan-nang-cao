@@ -1,96 +1,78 @@
-# BÁO CÁO BÀI KIỂM TRA GIỮA KỲ
-## Môn: Thuật toán nâng cao — Huffman Codes & Data Compression
+# BÁO CÁO BÀI KIỂM TRA GIỮA KỲ — THUẬT TOÁN NÂNG CAO
 
-**Câu 1:** Vận dụng kiến thức Huffman Codes và Data Compression, thực hiện
-nén dữ liệu cho tệp văn bản.
+**Họ và tên:** Nguyễn Minh Sáng
+**Lớp:** 34CNTT11
+**Môn:** Thuật toán nâng cao
+**Đề bài:** Câu 1 — Vận dụng kiến thức Huffman Codes và Data Compression, thực hiện nén dữ liệu cho một số loại dữ liệu: tệp văn bản, tệp âm thanh, tệp ảnh.
 
-**Phương án thực hiện:** Tệp văn bản (`.txt`) — ngôn ngữ lập trình Python.
-
----
-
-## 0. Định hướng thiết kế
-
-| Quyết định | Lựa chọn | Lý do |
-|---|---|---|
-| Loại dữ liệu | Tệp văn bản `.txt` (UTF-8) | Dễ kiểm chứng kết quả: giải nén ra so sánh byte-for-byte với bản gốc |
-| Ngôn ngữ | Python 3 | Có sẵn `heapq` (Min-Heap) và `collections.Counter` trong thư viện chuẩn |
-| **Đơn vị ký hiệu** | **Mã điểm Unicode (phương án B)** | Tần suất gom về cấp *ký tự* thay vì cấp *byte UTF-8* ⇒ tỷ lệ nén cao hơn nhiều; `n` nhỏ hơn nhiều ⇒ phân tích tiệm cận rõ ràng hơn |
-
-**Ghi chú quan trọng:** nếu nén ở mức *byte thô*, chữ có dấu tiếng Việt (ví dụ
-"ế") bị tách thành 3 byte riêng biệt, khiến cây Huffman luôn có 256 lá và tỷ lệ
-nén chỉ đạt khoảng 15–20%. Với phương án B, mỗi chữ là một ký hiệu duy nhất,
-tần suất tập trung vào các chữ phổ biến, và tỷ lệ nén đo được trên tệp mẫu
-tiếng Việt là **52,15%**. Đây là lựa chọn thiết kế có chủ đích, được giải
-trình trong báo cáo.
+**Phương án thực hiện:** Tệp văn bản (`.txt`) — ngôn ngữ Python.
+**Mã nguồn:** https://github.com/nguyenminhsang2003/Thuat-toan-nang-cao
 
 ---
 
-## a. TRÌNH BÀY THUẬT TOÁN
+## 1. Trình bày thuật toán
 
-### a.1. Nguyên lý chung
+### 1.1. Nguyên lý chung
 
-Huffman coding là phương pháp nén dữ liệu không mất thông tin (lossless) theo
-nguyên tắc: **ký hiệu xuất hiện càng nhiều thì mã càng ngắn**. Thuật toán sinh ra
-một *mã tiền tố* (prefix code) — trong đó không mã nào là tiền tố của mã khác —
-nhờ đó chuỗi mã nhị phân có thể giải mã ngược lại chính xác, không mơ hồ.
+Huffman coding là phương pháp nén dữ liệu **không mất thông tin** (lossless), dựa trên nguyên tắc: **ký hiệu xuất hiện càng nhiều trong văn bản thì mã biểu diễn càng ngắn**. Người ta dùng một cây nhị phân để gán mã nhị phân cho từng ký hiệu sao cho tổng số bit nhỏ nhất.
 
-### a.2. Thuật toán nén (4 bước)
+Điểm mấu chốt để mã hóa được là **tính chất tiền tố** (prefix-free): bảng mã được sinh ra phải bảo đảm không mã nào là tiền tố của mã khác. Nhờ vậy, khi đọc chuỗi bit từ trái sang phải, mỗi khi gặp một dãy bit khớp trọn vẹn với một mã trong bảng thì ta biết chắc chắn ký tự tương ứng — không có khả năng nhập nhằng. Đây là điều kiện cần và đủ để việc giải mã là đơn ánh.
 
-```
-BƯỚC 1: Đếm tần suất        BƯỚC 2: Dựng Min-Heap & Cây Huffman
-──────────────────────        ────────────────────────────────
-Đọc tệp .txt (UTF-8)          freq = Counter(text)          // Θ(N)
-text → chuỗi ký tự            heap = [(f, i, Node) cho mỗi ký hiệu]
-freq[ch] = số lần xuất hiện   heapq.heapify(heap)           // Θ(n)
-                              lặp khi heap còn > 1 node:
-                                  left  = heappop(heap)     // nhỏ nhất
-                                  right = heappop(heap)     // nhỏ nhất thứ 2
-                                  push(Node(f_left+f_right, left, right))
-                              gốc = heap[0]
+**Đơn vị ký hiệu.** Tôi chọn nén ở mức **ký tự Unicode** chứ không phải byte thô. Chữ có dấu tiếng Việt như "ế" chiếm 2 byte trong UTF-8; nếu nén ở mức byte thì mỗi chữ bị tách thành 2 ký hiệu riêng biệt, cây Huffman luôn có 256 lá với tần suất rất phân tán. Ở mức ký tự, tần suất dồn vào khoảng 90 chữ phổ biến và tỷ lệ nén cao hơn hẳn: **52,15%** với tệp mẫu tiếng Việt, so với khoảng 15–20% nếu nén ở mức byte. Ngoài ra, ở mức ký tự số ký hiệu phân biệt `n` nhỏ hơn nhiều, nên phân tích độ phức tạp ở mục 2 cũng rõ ràng hơn.
 
-BƯỚC 3: Tạo bảng mã         BƯỚC 4: Ghi bit ra tệp
-──────────────────────        ────────────────────────────────
-DFS từ gốc để lấy ĐỘ DÀI:     với mỗi ký tự trong text:
-  rẽ trái  → độ dài +1           ghi mã canonical của nó vào bit-stream
-  rẽ phải  → độ dài +1         đóng gói: 8 bit → 1 byte
-  tới lá   → length[ch] = d    ghi header (magic, version, n, pad, bảng độ dài)
-                               ghi payload
-⇒ mã CANONICAL (tái tạo từ độ dài, không lưu chuỗi mã)
-```
-
-### a.2.1. Mã canonical — kỹ thuật tối ưu phần đầu tệp
-
-Nếu lưu trực tiếp chuỗi mã của từng ký hiệu vào tệp, mỗi ký hiệu tốn
-~5–10 byte (mã hiệu + độ dài + chuỗi mã). Với một tệp có 91 ký hiệu, phần
-đầu tệp có thể chiếm gần một nửa dung lượng, và tỷ lệ nén bị tệ hại dù
-thuật toán hoàn toàn đúng.
-
-Giải pháp là **mã canonical** (canonical Huffman): tệp chỉ lưu *độ dài mã*
-của mỗi ký hiệu, còn hai bên nén và giải nén cùng tuân theo một quy tắc
-tái tạo mã:
-
-1. Sắp các ký hiệu theo **độ dài mã tăng dần**, khi trùng thì theo **mã điểm
-   tăng dần**.
-2. Duyệt theo thứ tự đó, gán các số nguyên liên tiếp `0, 1, 2, ...`; khi độ
-   dài tăng từ `L` sang `L'` thì **dịch số sang trái `L' - L` bit**.
-3. Mã của ký hiệu là biểu diễn nhị phân của số đó, viết đủ `L'` bit.
-
-Nhờ vậy bảng mã vẫn **prefix-free** và có **đúng độ dài tối ưu** của cây
-Huffman, nhưng phần đầu tệp chỉ tốn ~3 byte/ký hiệu, và bên giải nén tái tạo
-lại bảng mã **giống hệt** bên nén mà không cần lưu bất kỳ chuỗi mã nào.
-
-Đây chính là kỹ thuật mà các định dạng thực tế như **DEFLATE** (trong ZIP) và
-**JPEG** sử dụng.
-
-### a.3. Cây Huffman — ví dụ minh họa
-
-Xét chuỗi `A B B A C A` (tần suất: A=3, B=2, C=1):
+### 1.2. Thuật toán nén (4 bước)
 
 ```
-Bước gộp 1:  C(1) + B(2) → CB(3)      Bước gộp 2:  CB(3) + A(3) → root(6)
+BƯỚC 1: Đếm tần suất
+  Đọc tệp .txt (UTF-8) → chuỗi ký tự text
+  freq[ch] = số lần xuất hiện của ch trong text      // Θ(N)
+
+BƯỚC 2: Dựng Min-Heap và cây Huffman
+  heap = [(freq, tiebreak, Node) cho mỗi ký hiệu]
+  heapq.heapify(heap)                                 // Θ(n)
+  lặp khi heap còn > 1 nút:
+      left  = heappop(heap)      // nút nhẹ nhất trong heap
+      right = heappop(heap)      // nút nhẹ nhất thứ hai
+      push(Node(left.freq + right.freq, left, right))
+  gốc = heap[0]       // cây Huffman đã hoàn chỉnh (2n-1 nút)
+
+BƯỚC 3: Tạo bảng mã
+  DFS từ gốc để lấy độ dài mã:
+      rẽ trái  → độ dài + 1
+      rẽ phải  → độ dài + 1
+      tới lá   → length[ch] = độ dài đường đi
+  Sau đó dựng mã canonical từ bảng độ dài (xem mục 1.5)
+  ⇒ bảng mã PREFIX-FREE
+
+BƯỚC 4: Ghi bit ra tệp
+  Với mỗi ký tự trong text: ghi mã của nó vào chuỗi bit
+  Đóng gói 8 bit → 1 byte (bit cuối đệm 0)
+  Ghi header: magic + version + n_symbols + pad + bảng ký hiệu
+  Ghi payload
 ```
 
-Cây kết quả:
+**Vì sao dùng Min-Heap.** Thuật toán Huffman cần liên tục tìm hai nút có trọng số nhỏ nhất trong tập các nút đang chờ gộp. Nếu duyệt tuyến tính mỗi lần thì tổng thời gian là O(n²). Min-Heap cho phép lấy ra phần tử nhỏ nhất và chèn phần tử mới trong O(log n), nên toàn bộ quá trình gộp chỉ mất O(n log n).
+
+**Vì sao phải có tie-breaker.** Trong `heapq`, các phần tử được so sánh bằng toán tử `<`. Nếu hai ký hiệu có cùng tần suất (rất hay xảy ra, ví dụ hai nguyên âm "a" và "e" cùng xuất hiện 100 lần) thì chương trình sẽ thử so sánh hai đối tượng `HuffmanNode` với nhau và gây lỗi `TypeError`. Tôi khắc phục bằng cách lưu mỗi nút trong heap dưới dạng tuple `(tần suất, số thứ tự, node)` — số thứ tự luôn khác nhau nên không bao giờ phải so sánh node.
+
+### 1.3. Ví dụ minh họa
+
+Xét chuỗi `A B B A C A` với tần suất A = 3, B = 2, C = 1.
+
+**Bước gộp 1:** hai nút nhẹ nhất là C(1) và B(2), gộp thành CB(3).
+
+```
+heap ban đầu:  C(1)  B(2)  A(3)
+           →   CB(3)  A(3)
+```
+
+**Bước gộp 2:** hai nút nhẹ nhất là CB(3) và A(3), gộp thành root(6).
+
+```
+           →   root(6)
+```
+
+ Cây Huffman hoàn chỉnh:
 
 ```
               root (6)
@@ -100,86 +82,112 @@ Cây kết quả:
                    B(2)    C(1)
 ```
 
-Bảng mã sinh ra (duyệt gốc → lá):
+Bảng mã sinh ra:
 
-| Ký tự | Tần suất | Mã | Độ dài |
-|---|---|---|---|
-| A | 3 | `0` | 1 |
-| B | 2 | `10` | 2 |
-| C | 1 | `11` | 2 |
+| Ký tự | Tần suất | Đường đi từ gốc | Mã | Độ dài |
+|---|---|---|---|---|
+| A | 3 | trái | `0` | 1 |
+| B | 2 | phải-trái | `10` | 2 |
+| C | 1 | phải-phải | `11` | 2 |
 
-Bảng mã này **prefix-free**: `0`, `10`, `11` — không mã nào là tiền tố của mã khác.
-Chuỗi gốc `A B B A C A` mã hoá thành `0 10 10 0 11 0` = `010100110` (9 bit,
-thay vì 18 bit nếu dùng mã cố định 2 bit/ký tự).
+Bảng mã này prefix-free: không mã nào là tiền tố của mã khác (`0` không phải tiền tố của `10` hay `11`; `10` và `11` khác nhau ở bit cuối).
 
-Quan sát: ký tự tần suất cao nhất (A) nhận mã ngắn nhất (`0`), ký tự tần suất
-thấp nhất (C) nhận mã dài nhất — đúng nguyên lý của Huffman.
+Chuỗi gốc `A B B A C A` mã hóa thành:
 
-### a.4. Thuật toán giải nén
+```
+A  B  B  A  C  A
+0  10 10 0  11 0
+→ 010100110  (9 bit)
+```
+
+So với mã cố định 2 bit/ký tự thì cần 12 bit, so với ASCII 8 bit/ký tự thì cần 48 bit. Chú ý hai điều:
+
+- Ký tự tần suất cao nhất (A) nhận mã **ngắn nhất** (`0`), ký tự tần suất thấp nhất (C) nhận mã dài nhất — đúng nguyên lý của Huffman.
+- Mã ngắn nhất không bao giờ rỗng: kể cả khi chỉ có một ký tự duy nhất trong tệp thì mã của nó vẫn là `0` (1 bit), nếu để rỗng thì không thể giải mã được.
+
+### 1.4. Thuật toán giải nén
 
 ```
 1. Đọc header: magic "HUFF", version, n_symbols, pad
 2. Đọc bảng ký hiệu → dict {ký tự: độ dài mã}
-3. Tái tạo bảng mã CANONICAL từ các độ dài (cùng quy tắc ở mục a.2.1)
+3. Tái tạo bảng mã canonical từ các độ dài (cùng quy tắc ở bên nén)
    ⇒ thu được đúng bảng mã mà bên nén đã dùng
-4. Đọc payload → giải mã từng byte ra chuỗi bit (bỏ `pad` bit cuối)
+4. Đọc payload → chuỗi bit (bỏ `pad` bit đệm ở cuối)
 5. Duyệt bit từ trái sang phải:
-       nối bit vào bộ đệm; nếu bộ đệm khớp một mã hoàn chỉnh trong bảng
-       → ghi ký tự tương ứng và xóa bộ đệm
+       nối bit vào bộ đệm
+       nếu bộ đệm khớp một mã hoàn chỉnh trong bảng
+          → ghi ký tự tương ứng, xóa bộ đệm
 6. Ghi chuỗi ký tự ra tệp .txt (UTF-8)
 ```
 
-Bảng độ dài được nhúng ngay trong tệp `.huff`, nên **quá trình giải nén hoàn
-toàn độc lập với tệp gốc** — chỉ cần tệp `.huff` là đủ.
+Nhờ tính prefix-free, ở bước 5 có **duy nhất một** mã khớp tại mỗi thời điểm, nên quá trình giải mã luôn xác định.
 
-### a.4.1. Định dạng tệp `.huff`
+Bảng độ dài được nhúng ngay trong tệp `.huff`, do đó **quá trình giải nén hoàn toàn độc lập với tệp gốc** — chỉ cần tệp `.huff` là đủ để khôi phục lại nội dung.
 
-| Thành phần   | Kích thước      | Nội dung                                        |
+### 1.5. Mã canonical và định dạng tệp `.huff`
+
+**Vấn đề:** nếu lưu trực tiếp chuỗi mã của từng ký hiệu vào tệp thì mỗi ký hiệu tốn khoảng 10 byte (mã hiệu 4 byte + độ dài 1 byte + chuỗi mã dạng ký tự ASCII). Với 94 ký hiệu, phần đầu tệp sẽ chiếm gần 1 KB — đủ để làm hỏng tỷ lệ nén dù thuật toán hoàn toàn đúng.
+
+**Giải pháp — mã canonical** (canonical Huffman): tệp chỉ lưu *độ dài mã* của mỗi ký hiệu, còn hai bên nén và giải nén cùng tuân theo một quy tắc để tái tạo bảng mã:
+
+1. Sắp các ký hiệu theo **độ dài mã tăng dần**, khi trùng thì theo **mã điểm tăng dần**.
+2. Duyệt theo thứ tự đó, gán các số nguyên liên tiếp `0, 1, 2, ...`; khi độ dài tăng từ `L` sang `L'` thì **dịch số sang trái `L' - L` bit**.
+3. Mã của ký hiệu là biểu diễn nhị phân của số đó, viết đủ `L'` bit.
+
+Áp dụng cho ví dụ ở mục 1.3 (sắp theo độ dài rồi theo mã điểm: A len 1, B len 2, C len 2):
+
+| Ký tự | Độ dài | Số được gán | Mã |
+|---|---|---|---|
+| A | 1 | 0 | `0` |
+| B | 2 | 1 | `01` |
+| C | 2 | 2 | `10` |
+
+Kết quả là bảng mã vẫn prefix-free và có **đúng độ dài tối ưu** của cây Huffman (A dài 1 bit, B và C dài 2 bit — y hệt cây), nhưng phần đầu tệp chỉ tốn ~3 byte/ký hiệu thay vì ~10 byte như cách lưu trực tiếp chuỗi mã.
+
+**Cấu trúc tệp `.huff`:**
+
+| Thành phần | Kích thước | Nội dung |
 |---|---|---|
-| Magic        | 4 byte          | `b"HUFF"` — chống ghi nhầm tệp                 |
-| version      | 1 byte          | `2` — số phiên bản định dạng                   |
-| n_symbols    | 2 byte (uint16) | số ký hiệu phân biệt `n`                       |
-| pad          | 1 byte (uint8)  | số bit đệm cuối payload (0..7)                 |
-| Bảng ký hiệu | `3n` byte xấp xỉ | mỗi ký hiệu: độ dài ký tự UTF-8 (1b) + ký tự + độ dài mã (1b), sắp theo mã điểm tăng dần |
-| payload      | thay đổi        | chuỗi bit đã đóng gói thành byte (đệm 0 ở cuối) |
+| Magic | 4 byte | `b"HUFF"` — chống ghi nhầm tệp |
+| version | 1 byte | số phiên bản định dạng |
+| n_symbols | 2 byte | số ký hiệu phân biệt `n` |
+| pad | 1 byte | số bit đệm cuối payload (0..7) |
+| Bảng ký hiệu | ~3 byte/ký hiệu | độ dài ký tự UTF-8 (1b) + ký tự + độ dài mã (1b), sắp theo mã điểm tăng dần |
+| payload | thay đổi | chuỗi bit đã đóng gói thành byte (đệm 0 ở cuối) |
 
-### a.5. Các trường hợp biên được xử lý
+**Các trường hợp biên được xử lý:**
 
-| Trường hợp | Xử lý |
+| Trường hợp | Cách xử lý |
 |---|---|
-| Chỉ **một ký hiệu duy nhất** | Cây chỉ có 1 nút, mã gán cố định `"0"` (không để mã rỗng — mỗi ký tự vẫn tốn 1 bit) |
-| **Tệp rỗng** | Không có ký hiệu nào để nén; header ghi `n=0`, `pad=0`, payload rỗng; giải nén ra tệp rỗng |
-| Số bit **không chia hết cho 8** | Ghi số bit đệm (`pad`, 0..7) vào header để giải nén biết chỗ nào là padding |
-| Tệp `.huff` **không hợp lệ** | Kiểm tra magic `"HUFF"` → ném lỗi rõ ràng thay vì crash |
-| **Dòng mới trên Windows** | Mở/ghi tệp với `newline=""` để ngăn Windows tự dịch thuật `\n` ⇄ `\r\n` (text-mode) — nếu không thì round-trip sai byte-for-byte |
+| Chỉ một ký hiệu duy nhất | Cây chỉ có 1 nút, gán mã cố định `"0"` (không để mã rỗng) |
+| Tệp rỗng | Không có ký hiệu để nén, header ghi `n = 0`, payload rỗng |
+| Số bit không chia hết cho 8 | Ghi số bit đệm `pad` vào header để giải nén biết chỗ nào là padding |
+| Tệp `.huff` không hợp lệ | Kiểm tra magic và version → báo lỗi rõ ràng thay vì crash |
+| Dòng mới trên Windows | Mở/ghi tệp với `newline=""` để không bị đổi `\n` thành `\r\n` |
 
 ---
 
-## b. TÍNH TOÁN CÁC GIÁ TRỊ O, Ω, Θ
+## 2. Tính toán các giá trị O, Ω, Θ
 
-Ký hiệu: `N` = tổng số ký tự của tệp văn bản, `n` = số ký hiệu phân biệt
-(`n ≤ N`, và trong văn bản thực tế `n` chỉ khoảng 30–95 theo đo ở mục c.1),
-`L` = độ dài mã trung bình (bit/ký tự).
+Ký hiệu: `N` = tổng số ký tự của tệp, `n` = số ký hiệu phân biệt, `L` = độ dài mã trung bình (bit/ký tự).
 
-### b.1. Phân tích từng bước
+### 2.1. Phân tích từng bước
 
 | Bước | Thời gian | Giải thích |
 |---|---|---|
-| Đọc tệp + đếm tần suất (`Counter` = bảng băm) | **Θ(N)** | phải duyệt qua N ký tự |
-| `heapq.heapify` (dựng Min-Heap từ n nút) | **Θ(n)** | heapify của Floyd chạy O(n), *không* phải O(n log n) |
-| n−1 lần `heappop` × 2 + `heappush` | **Θ(n log n)** | mỗi thao tác O(log n), tổng cộng (n−1) lần |
-| Duyệt cây để lấy độ dài mã (DFS) | **Θ(n)** | duyệt hết n lá, mỗi lá một độ dài |
+| Đọc tệp + đếm tần suất (`Counter` dùng bảng băm) | **Θ(N)** | phải duyệt qua N ký tự |
+| `heapq.heapify` (dựng Min-Heap từ n nút) | **Θ(n)** | heapify của Floyd chạy O(n), *không phải* O(n log n) |
+| (n−1) lần `heappop` × 2 + `heappush` | **Θ(n log n)** | mỗi thao tác O(log n), tổng cộng (n−1) lần |
+| Duyệt cây lấy độ dài mã (DFS) | **Θ(n)** | duyệt hết n lá, mỗi lá một độ dài |
 | Sắp xếp + tái tạo mã canonical | **Θ(n log n)** | sắp n ký hiệu theo (độ dài, mã điểm) |
-| Mã hoá N ký tự (sinh N đoạn mã) | **Θ(N·L)** | tổng số bit ghi ra = Σ len(code[ch]) = N·L |
-| Đóng gói bit → byte | **Θ(N·L)** | quét từng bit một lần |
-| Ghi/đọc tệp | **Θ(N·L)** | tuyến tính theo số bit |
+| Mã hóa N ký tự | **Θ(N·L)** | tổng số bit ghi ra = Σ len(code[ch]) = N·L |
+| Đóng gói bit thành byte + ghi/đọc tệp | **Θ(N·L)** | quét từng bit một lần |
 
-Vì mã là prefix-code, ta có **L ≤ log₂ n** (tính chất cây Huffman với trọng số
-tần suất), suy ra `Θ(N·L) = Θ(N log n)`.
+Vì bảng mã là prefix-code nên **L ≤ log₂ n** (tính chất của cây Huffman với trọng số tần suất), suy ra `Θ(N·L) = Θ(N log n)`.
 
-### b.2. Tổng hợp
+### 2.2. Tổng hợp
 
-Thời gian tổng quát:
+Tổng thời gian:
 
 ```
 T(N, n) = Θ(N) + Θ(n log n) + Θ(N log n) = Θ(N + n log n)
@@ -188,86 +196,64 @@ T(N, n) = Θ(N) + Θ(n log n) + Θ(N log n) = Θ(N + n log n)
 Do đó:
 
 - **O(N + n log n)** — cận trên.
-- **Ω(N)** — cận dưới: bất kỳ thuật toán nén nào cũng phải đọc qua N ký tự
-  để xác định được tần suất, nên không thể chạy nhanh hơn tuyến tính.
-- **Θ(N + n log n)** — cận chặt trong trường hợp tổng quát (N và n thay đổi
-  độc lập, ví dụ n = Θ(N)).
+- **Ω(N)** — cận dưới: bất kỳ thuật toán nén nào cũng phải đọc qua N ký tự để xác định được tần suất, nên không thể chạy nhanh hơn tuyến tính.
+- **Θ(N + n log n)** — cận chặt trong trường hợp tổng quát, khi N và n thay đổi độc lập (ví dụ n = Θ(N)).
 
-### b.3. Khi n cố định — trường hợp thực tế của bài toán
+### 2.3. Trong trường hợp thực tế của bài toán
 
-Tập ký hiệu là **mã điểm Unicode**, nên `n` có trần cố định (1 114 112 mã điểm),
-và trong văn bản thực tế `n` chỉ khoảng 30–95 (đo được: 94 với tiếng Việt,
-44 với tiếng Anh) — hằng số rất nhỏ so với N. Khi đó `n log n` là hằng số, và:
+Tập ký hiệu là mã điểm Unicode nên `n` có trần cố định (1 114 112 mã điểm), và trong văn bản thực tế `n` chỉ khoảng 30–95 (đo được 94 với tiếng Việt, 44 với tiếng Anh) — hằng số rất nhỏ so với N. Khi đó `n log n` là hằng số và:
 
 ```
 T(N) = Θ(N + n log n) = Θ(N)
 ```
 
-**Kết luận (theo đúng ký hiệu đề bài yêu cầu):**
-`O(N + n log n)`, `Ω(N)`, và `Θ(N)` khi xem `n` là hằng số — tức là tiệm cận
-tuyến tính theo độ dài tệp.
+**Kết luận:** `O(N + n log n)`, `Ω(N)`, và `Θ(N)` khi xem `n` là hằng số — tức là **tiệm cận tuyến tính theo độ dài tệp**. Đây là tính chất tốt nhất có thể, vì bắt buộc phải đọc hết tệp.
 
-> Bản chất: thuật toán đạt **tuyến tính** theo kích thước dữ liệu, đây là tính
-> chất tốt nhất có thể vì bắt buộc phải đọc hết tệp.
-
-### b.4. Độ phức tạp bộ nhớ
+### 2.4. Độ phức tạp bộ nhớ
 
 | Thành phần | Bộ nhớ |
 |---|---|
 | Cây Huffman | `2n − 1` nút ⇒ **O(n)** nút |
-| Bảng độ dài mã (n ký hiệu) | **O(n)** |
+| Bảng độ dài mã | **O(n)** |
 | Bảng mã tái tạo (n chuỗi bit) | **O(n log n)** bit |
-| Chuỗi `text` đã nạp vào RAM | **O(N)** ký tự — do cách đọc tệp một lần |
-| Chuỗi bit sinh ra khi mã hóa | **O(N·L)** bit |
+| Chuỗi `text` nạp vào RAM | **O(N)** ký tự — do cách đọc tệp một lần |
 
-Tổng theo cách hiện tại: **O(N + n log n)**. Lưu ý phần phụ thuộc `N` đến từ
-thói quen nạp toàn bộ tệp vào bộ nhớ để đếm tần suất, **không phải bản chất
-của thuật toán dựng cây** — về lý thuyết có thể đếm tần suất theo dòng
-(streaming) và dựng cây song song, khi đó bộ nhớ phụ thuộc N chỉ còn O(n)
-cộng một buffer đọc cố định.
+Tổng: **O(N + n log n)** theo cách hiện tại. Phần phụ thuộc `N` đến từ cách đọc toàn bộ tệp vào bộ nhớ một lần để đếm tần suất; bản thân thuật toán dựng cây chỉ cần O(n) bộ nhớ.
 
 ---
 
-## c. ĐÁNH GIÁ ĐỘ PHỨC TẠP THUẬT TOÁN
+## 3. Đánh giá độ phức tạp thuật toán
 
-### c.1. Kết quả thực nghiệm
+### 3.1. Kết quả thực nghiệm
 
-> **Cách chạy lấy số liệu:**
-> ```bash
-> python make_samples.py                          # 1. sinh tệp mẫu
-> python huffman_coder.py demo                    # 2. nén + xác minh
-> python huffman_coder.py info samples/sample_vi.txt   # 3. bảng mã + entropy
-> ```
+Các lệnh dùng để đo:
 
-<!-- SỐ LIỆU THỰC NGHIỆM - đã chạy thực tế, xem bên dưới -->
+```bash
+python make_samples.py                                 # sinh tệp văn bản mẫu
+python huffman_coder.py demo                           # nén + xác minh round-trip
+python huffman_coder.py info samples/sample_vi.txt     # bảng mã + entropy
+```
 
-| Tệp mẫu | Đặc điểm | Kích thước gốc (bytes) | Kích thước nén (bytes) | Tỷ lệ nén | n ký hiệu | Round-trip |
+| Tệp mẫu | Đặc điểm | Kích thước gốc | Kích thước nén | Tỷ lệ nén | n ký hiệu | Round-trip |
 |---|---|---|---|---|---|---|
-| `sample_vi.txt` | Tiếng Việt có dấu | 25 647 | 12 272 | **52,15%** | 94 | MATCH |
-| `sample_en.txt` | Tiếng Anh | 24 016 | 13 196 | **45,05%** | 44 | MATCH |
-| `sample_skewed.txt` | Phân bố lệch (1 ký tự ~70%) | 12 079 | 2 358 | **80,48%** | 27 | MATCH |
+| `sample_vi.txt` | Tiếng Việt có dấu | 25 647 B | 12 272 B | **52,15%** | 94 | MATCH |
+| `sample_en.txt` | Tiếng Anh | 24 016 B | 13 196 B | **45,05%** | 44 | MATCH |
+| `sample_skewed.txt` | Phân bố lệch (1 ký tự ~70%) | 12 079 B | 2 358 B | **80,48%** | 27 | MATCH |
 
-Công thức tỷ lệ nén dùng trong báo cáo:
+Công thức tỷ lệ nén:
 
 ```
 Tỷ lệ nén (%) = (1 − S_nén / S_gốc) × 100%
 ```
 
-**Vì sao tệp mẫu phải đủ lớn.** Huffman có một chi phí cố định là **bảng mã**
-(~3 byte/ký hiệu, không phụ thuộc độ dài tệp). Trên tệp chỉ 2 KB, bảng mã
-chiếm gần một nửa dung lượng, nên tỷ lệ nén bị bóp méo xuống còn 5–20% —
-**không phản ánh hiệu quả thuật toán mà phản ánh chi phí khởi tạo**. Khi tệp
-đủ lớn vài chục KB, chi phí này được phân bổ và tỷ lệ nén phản ánh đúng
-hiệu quả thực tế. Vì vậy chương trình sinh tệp mẫu ~24 KB cho hai tệp văn
-bản tự nhiên.
+**Lưu ý về kích thước tệp mẫu.** Huffman có một chi phí cố định là bảng mã (~3 byte/ký hiệu, không phụ thuộc độ dài tệp). Trên tệp chỉ 2 KB, bảng mã chiếm gần một nửa dung lượng nên tỷ lệ nén bị bóp méo xuống còn 5–20% — đó không phản ánh hiệu quả thuật toán mà phản ánh chi phí khởi tạo. Vì vậy chương trình sinh tệp mẫu khoảng 24 KB cho hai tệp văn bản tự nhiên; khi đó chi phí bảng mã được phân bổ và tỷ lệ nén phản ánh đúng hiệu quả thực tế.
 
-### c.1.1. Độ dài mã so với entropy (tệp `sample_vi.txt`)
+### 3.2. Phân tích entropy và độ dài mã
 
-Kết quả lệnh `python huffman_coder.py info samples/sample_vi.txt`:
+Với `sample_vi.txt` có 19 080 ký tự, lệnh `info` cho ra:
 
 | Đại lượng | Giá trị |
 |---|---|
-| Số ký tự | 19 080 |
 | Số ký hiệu phân biệt `n` | 94 |
 | Entropy `H` (cận dưới lý tưởng) | **4,9464 bit/ký tự** |
 | Độ dài mã trung bình `L` (Huffman) | **4,9839 bit/ký tự** |
@@ -275,9 +261,7 @@ Kết quả lệnh `python huffman_coder.py info samples/sample_vi.txt`:
 | Tổng số bit dữ liệu | 95 092 bit (≈ 11 887 byte) |
 | Tổng số bit nếu dùng mã cố định 8 bit | 152 640 bit (≈ 19 080 byte) |
 
-Chênh lệch chỉ **0,0375 bit/ký tự** — tức mã Huffman đạt gần đúng cận lý tưởng
-của bài toán mã hóa ký hiệu theo ký hiệu. (Định lý Shannon: `H ≤ L < H + 1`
-khi `n` là lũy thừa của 2, và `H ≤ L < H + 2` nói chung.)
+Chênh lệch chỉ **0,0375 bit/ký tự** — tức mã Huffman đạt gần đúng cận lý tưởng của bài toán mã hóa ký hiệu theo ký hiệu. Theo định lý Shannon thì `H ≤ L < H + 1` khi `n` là lũy thừa của 2, và `H ≤ L < H + 2` nói chung. Đây là lý do Huffman là mã tối ưu theo nghĩa **trung bình ký hiệu**.
 
 Một số dòng trong bảng mã thực tế sinh ra:
 
@@ -294,100 +278,22 @@ Một số dòng trong bảng mã thực tế sinh ra:
 | `.` | 221 | 7 | `1100010` |
 | `ế` | 104 | 8 | `11101010` |
 
-Quan sát đáng chú ý: dấu cách (tần suất cao nhất) chỉ tốn **2 bit**, còn các
-ký tự hiếm như `ế` tốn tới **8 bit**. Đó chính là cơ chế của Huffman — mã
-được phân bổ theo xác suất, không phải đồng đều.
+Dấu cách (tần suất cao nhất) chỉ tốn 2 bit, còn ký tự hiếm như `ế` tốn tới 8 bit — mã được phân bổ theo xác suất chứ không đồng đều, đúng tinh thần của Huffman.
 
-### c.2. Nhận xét
+### 3.3. Nhận xét
 
-1. **Tỷ lệ nén phụ thuộc phân bố tần suất, không phụ thuộc độ dài tệp.**
-   `sample_skewed.txt` đạt **80,48%** vì tần suất tập trung mạnh vào một ký
-   tự; `sample_vi.txt` đạt 52,15% vì bảng chữ cái phân bố đều hơn; và
-   `sample_en.txt` chỉ 45,05% vì bảng chữ cái Latin phân bố đều hơn nữa và
-   có nhiều nguyên âm tần suất gần bằng nhau. Đây chính là đặc tính của
-   Huffman: **tần suất càng lệch, nén càng hiệu quả**.
+**a) Tỷ lệ nén phụ thuộc phân bố tần suất chứ không phụ thuộc độ dài tệp.** `sample_skewed.txt` đạt 80,48% vì tần suất tập trung mạnh vào một ký tự; `sample_vi.txt` đạt 52,15%; `sample_en.txt` chỉ 45,05% vì bảng chữ cái Latin phân bố đều hơn, nhiều nguyên âm có tần suất gần bằng nhau. Đây là đặc tính cơ bản của Huffman: **tần suất càng lệch thì nén càng hiệu quả**.
 
-2. **Độ dài mã thực tế rất gần entropy.** Với `sample_vi.txt`: `H = 4,9464`
-   còn `L = 4,9839` — chênh lệch chỉ **0,0375 bit/ký tự**. Với định lý Shannon,
-   `H ≤ L < H + 1` khi `n` là lũy thừa của 2, và `H ≤ L < H + 2` nói chung.
-   Đây là lý do Huffman là mã tối ưu theo nghĩa **trung bình ký hiệu**.
+**b) Huffman vượt trội mã cố định (Fixed-length Code).** Với `sample_vi.txt` có 94 ký hiệu phân biệt, mã cố định cần 7 bit/ký tự cho mọi ký tự (⌈log₂94⌉ = 7), tức 133 560 bit. Huffman chỉ dùng 95 092 bit, tiết kiệm **28,8%** so với mã cố định và **37,7%** so với mã 8 bit/ký tự. Chênh lệch này càng lớn khi phân bố tần suất càng lệch.
 
-3. **Huffman vượt trội Fixed-length Code (mã cố định).** Với `sample_vi.txt`
-   có 94 ký hiệu phân biệt, mã cố định cần **7 bit/ký tự**
-   (⌈log₂94⌉ = 7) cho mọi ký tự — tức 133 560 bit. Huffman chỉ dùng 95 092
-   bit, tiết kiệm **28,8%** số bit so với mã cố định, và 37,7% so với mã
-   8 bit/ký tự. Chênh lệch này càng lớn khi phân bố tần suất càng lệch.
+**c) Giới hạn của Huffman đơn thuần.** Bảng mã phải được truyền kèm dữ liệu nên với tệp rất nhỏ (vài chữ) tổng dung lượng có thể lớn hơn tệp gốc. Trong bài này đã xử lý bằng mã canonical (~3 byte/ký hiệu thay vì ~10) và bằng cách dùng tệp mẫu đủ lớn.
 
-4. **So với phương án byte thô:** nếu nén ở mức byte, tỷ lệ nén chỉ khoảng
-   15–20% vì byte UTF-8 của chữ có dấu rất phân tán. Phương án B (mã điểm
-   Unicode) cho tỷ lệ nén gấp 2–3 lần với cùng một thuật toán — đây là minh
-   chứng rõ ràng cho lựa chọn thiết kế ở mục 0.
+### 3.4. Kiểm chứng tính đúng đắn
 
-5. **Giới hạn của Huffman đơn thuần:** bảng mã phải được truyền kèm dữ liệu.
-   Với tệp nhỏ, phần bảng mã có thể chiếm tỷ lệ đáng kể (ví dụ tệp chỉ vài
-   chữ); khi đó tổng dung lượng có thể **lớn hơn** tệp gốc. Trong bài này đã
-   xử lý bằng **mã canonical** (chỉ lưu độ dài mã, ~3 byte/ký hiệu thay vì
-   ~10), và bằng cách dùng tệp mẫu đủ lớn. Giải pháp triệt để hơn trong thực
-   tế là kết hợp Huffman với LZ77 (như **DEFLATE** trong ZIP/GZIP).
+Bộ kiểm thử nội tại (`python huffman_coder.py test`) gồm 11 mục kiểm tra, tất cả đều PASS:
 
-6. **Kinh nghiệm rút ra từ quá trình kiểm thử.** Trong quá trình phát triển,
-   hai lỗi đã được bộ kiểm thử tự động phát hiện:
-   - *Bảng mã bị đảo chiều.* Bản đầu tiên lưu bảng mã theo hướng `{mã: ký tự}`
-     khi đọc từ tệp, trong khi phần giải mã mong đợi `{ký tự: mã}` — kết quả
-     là file giải nén ra **rỗng hoàn toàn**. Lỗi này không lộ ra khi test bằng
-     chuỗi nội tại, chỉ lộ ra khi test round-trip trên tệp thật.
-   - *Dịch thuật dòng mới trên Windows.* Mở/ghi tệp ở chế độ text thường khiến
-     Windows tự đổi `\n` ⇄ `\r\n`, làm round-trip sai byte-for-byte. Khắc
-     phục bằng tham số `newline=""`.
+- 6 trường hợp chuỗi (chỉ 1 ký tự, ký tự lặp lại, chuỗi kinh điển, tiếng Việt có dấu, đủ bộ ký tự tiếng Việt, từ lặp nhiều) — với mỗi trường hợp kiểm tra tính **prefix-free** của bảng mã và **round-trip**.
+- Tái tạo mã canonical từ bảng độ dài; điều kiện Kraft `Σ 2^(−len) ≤ 1` cho mọi cây Huffman; canonical giữ nguyên độ dài mã gốc.
+- Round-trip trên tệp thật với so sánh **byte-for-byte**; xử lý tệp rỗng.
 
-   → Bài học: **mọi thuật toán nén đều phải có kiểm thử round-trip byte-for-byte**,
-   vì "chạy không lỗi" khác hoàn toàn với "giải mã đúng".
-
-### c.3. Tính đúng đắn
-
-- **Bảng mã prefix-free** → giải mã không mơ hồ: mỗi chuỗi bit đọc được
-  xác định duy nhất một ký tự.
-- **Điều kiện Kraft:** tổng `Σ 2^(−len)` của các độ dài mã luôn `≤ 1` — là
-  điều kiện cần và đủ để tồn tại một cây prefix-code. Bộ kiểm thử kiểm tra
-  điều này cho mọi cây Huffman sinh ra.
-- **Round-trip byte-for-byte:** sau khi nén, chương trình tự giải nén ra tệp
-  tạm và so sánh với tệp gốc — lệnh `compress` in ra `ROUND-TRIP: MATCH`.
-- **Bộ kiểm thử nội tại** (`python huffman_coder.py test`) gồm 11 kiểm tra:
-  6 trường hợp chuỗi (1 ký tự, lặp lại, chuỗi kinh điển, tiếng Việt, đủ ký
-  tự tiếng Việt, từ lặp nhiều) với kiểm tra prefix-free + round-trip; tái tạo
-  mã canonical từ độ dài; điều kiện Kraft; canonical giữ nguyên độ dài mã;
-  round-trip trên tệp thật; và tệp rỗng.
-
----
-
-## d. TÀI LIỆU THAM KHẢO
-
-1. Huffman, D. A. (1952). *A Method for the Construction of Minimum-Redundancy
-   Codes*. IRE Transactions on Information Theory, 4(3), 83–87.
-2. Cormen, T. H., Leiserson, C. E., Rivest, R. L., & Stein, C. (2009).
-   *Introduction to Algorithms* (3rd ed.), Chapter 16 — Greedy Algorithms.
-3. Shannon, C. E. (1948). *A Mathematical Theory of Communication*.
-4. W3C. *Unicode Standard — Chapter 3: Conformance, U+0000..U+10FFFF*.
-
-## e. LIÊN KẾT MÃ NGUỒN
-
-**GitHub Repository:** https://github.com/nguyenminhsang2003/Thuat-toan-nang-cao
-
-Bài kiểm tra giữa kỳ môn Thuật toán nâng cao — Huffman Codes & Data Compression.
-Mã nguồn Python, có kèm bộ kiểm thử tự động và các tệp nén mẫu.
-
-```
-Thuat-toan-nang-cao/
-├── huffman_coder.py       # mã nguồn chính
-├── make_samples.py        # sinh tệp văn bản mẫu
-├── README.md
-├── report.md
-├── .gitignore
-└── samples/
-    ├── sample_vi.txt
-    ├── sample_en.txt
-    ├── sample_skewed.txt
-    ├── sample_vi.huff
-    ├── sample_en.huff
-    └── sample_skewed.huff
-```
+Lệnh `compress` cũng tự giải nén ngay sau khi nén và in kết quả `ROUND-TRIP: MATCH`, nhờ đó mỗi lần chạy đều được kiểm chứng tự động. Bộ kiểm thử này đã phát hiện được hai lỗi mà chạy bình thường không thấy: bảng mã bị lưu ngược hướng khi đọc từ tệp (khiến file giải nén ra rỗng), và Windows tự đổi `\n` thành `\r\n` khi đọc/ghi tệp ở chế độ text — hai lỗi này đều không gây ra lỗi runtime mà chỉ làm sai dữ liệu, nên chỉ kiểm thử round-trip mới bắt được.

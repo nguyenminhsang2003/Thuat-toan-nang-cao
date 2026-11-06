@@ -1,18 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-make_samples.py
-===============
 Sinh các tệp văn bản mẫu cho thí nghiệm nén Huffman.
 
-Vì sao cần tệp mẫu LỚN?
-    Chi phí cố định của Huffman là BẢNG MÃ (~3 byte/ký hiệu). Trên tệp 2 KB,
-    bảng mã chiếm phần lớn dung lượng nên tỷ lệ nén bị bóp méo (chỉ 5–20%).
-    Trên tệp vài chục KB, chi phí này được phân bổ => tỷ lệ nén phản ánh
-    đúng hiệu quả thực tế của thuật toán.
-
 Cách dùng:
-    python make_samples.py          # sinh lại toàn bộ tệp mẫu
+    python make_samples.py
 """
 
 import os
@@ -20,9 +12,9 @@ import random
 
 BASE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "samples")
 
-# --------------------------------------------------------------------------
-# Kho câu văn tiếng Việt
-# --------------------------------------------------------------------------
+# ============================================================================
+# KHO CÂU VĂN
+# ============================================================================
 VI_SENTENCES = [
     "Công tác thủy lợi là một trong những nội dung trọng tâm trong phát triển kinh tế - xã hội.",
     "Việt Nam có điều kiện khí hậu đặc thù, lượng mưa lớn và tập trung vào mùa mưa.",
@@ -54,9 +46,9 @@ VI_HEADERS = [
     "Ứng dụng khoa học trong quản lý nước",
 ]
 
-# --------------------------------------------------------------------------
-# Kho câu tiếng Anh
-# --------------------------------------------------------------------------
+# ============================================================================
+# KHO CÂU TIẾNG ANH
+# ============================================================================
 EN_SENTENCES = [
     "Data compression is the process of encoding information in a more compact form.",
     "Compressed data is typically smaller, faster to transmit, and cheaper to store.",
