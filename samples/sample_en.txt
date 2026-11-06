@@ -1,0 +1,181 @@
+
+An introduction to data compression
+
+A min heap is the natural data structure for this task. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. The two least frequent nodes are then combined into a single parent node.
+
+Modern systems combine Huffman coding with a dictionary based scheme to do even better. The central idea is that frequently occurring characters receive short binary codes. Modern systems combine Huffman coding with a dictionary based scheme to do even better. Compressed data is typically smaller, faster to transmit, and cheaper to store. The reconstruction rule depends only on the lengths, so no extra data is needed.
+
+It does guarantee that the average code length is within one bit of the entropy. The Huffman code is not always optimal for a single message, since the table must be sent too. Many file formats store a table of code lengths rather than the codes themselves. A min heap is the natural data structure for this task.
+
+
+Limitations and practical considerations
+
+Compressed data is typically smaller, faster to transmit, and cheaper to store. Data compression is the process of encoding information in a more compact form. A min heap is the natural data structure for this task. This guarantee is what makes the algorithm so useful in practice. This merging step is repeated until only one node remains, and that node is the root.
+
+It does guarantee that the average code length is within one bit of the entropy. Many file formats store a table of code lengths rather than the codes themselves. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. This canonical representation is compact and can be reconstructed by both sides. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. A code table is produced in which no code is a prefix of any other code.
+
+Data compression is the process of encoding information in a more compact form. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. This merging step is repeated until only one node remains, and that node is the root. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT.
+
+Many file formats store a table of code lengths rather than the codes themselves. Many file formats store a table of code lengths rather than the codes themselves. A min heap is the natural data structure for this task. Many file formats store a table of code lengths rather than the codes themselves.
+
+This guarantee is what makes the algorithm so useful in practice. It does guarantee that the average code length is within one bit of the entropy. Many file formats store a table of code lengths rather than the codes themselves. A min heap is the natural data structure for this task.
+
+A min heap is the natural data structure for this task. This guarantee is what makes the algorithm so useful in practice. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. The Huffman code is not always optimal for a single message, since the table must be sent too. This guarantee is what makes the algorithm so useful in practice.
+
+
+Limitations and practical considerations
+
+To build the Huffman tree, one begins by counting how often each character appears. Huffman coding remains a building block inside more complex compressors such as DEFLATE. Many file formats store a table of code lengths rather than the codes themselves. Many file formats store a table of code lengths rather than the codes themselves. A min heap is the natural data structure for this task. This guarantee is what makes the algorithm so useful in practice.
+
+A min heap is the natural data structure for this task. The reconstruction rule depends only on the lengths, so no extra data is needed. This canonical representation is compact and can be reconstructed by both sides. This guarantee is what makes the algorithm so useful in practice. Huffman coding remains a building block inside more complex compressors such as DEFLATE. A code table is produced in which no code is a prefix of any other code.
+
+Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Modern systems combine Huffman coding with a dictionary based scheme to do even better. To build the Huffman tree, one begins by counting how often each character appears. Huffman coding remains a building block inside more complex compressors such as DEFLATE. The two least frequent nodes are then combined into a single parent node.
+
+Many file formats store a table of code lengths rather than the codes themselves. This canonical representation is compact and can be reconstructed by both sides. Many file formats store a table of code lengths rather than the codes themselves. Many file formats store a table of code lengths rather than the codes themselves. Modern systems combine Huffman coding with a dictionary based scheme to do even better.
+
+
+Limitations and practical considerations
+
+The central idea is that frequently occurring characters receive short binary codes. Huffman coding remains a building block inside more complex compressors such as DEFLATE. Many file formats store a table of code lengths rather than the codes themselves. A min heap is the natural data structure for this task. Modern systems combine Huffman coding with a dictionary based scheme to do even better.
+
+This merging step is repeated until only one node remains, and that node is the root. Data compression is the process of encoding information in a more compact form. The central idea is that frequently occurring characters receive short binary codes.
+
+Compressed data is typically smaller, faster to transmit, and cheaper to store. The reconstruction rule depends only on the lengths, so no extra data is needed. Compressed data is typically smaller, faster to transmit, and cheaper to store.
+
+The reconstruction rule depends only on the lengths, so no extra data is needed. A code table is produced in which no code is a prefix of any other code. Lossless compression reduces the size of a file without removing any information. Many file formats store a table of code lengths rather than the codes themselves. When the file is decompressed, the result is bit for bit identical to the original.
+
+A code table is produced in which no code is a prefix of any other code. The central idea is that frequently occurring characters receive short binary codes. Compressed data is typically smaller, faster to transmit, and cheaper to store. It does guarantee that the average code length is within one bit of the entropy. Compressed data is typically smaller, faster to transmit, and cheaper to store.
+
+A min heap is the natural data structure for this task. A min heap is the natural data structure for this task. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT.
+
+
+The Huffman algorithm in practice
+
+Lossless compression reduces the size of a file without removing any information. The two main families of compression algorithms are lossless and lossy. Data compression is the process of encoding information in a more compact form.
+
+Data compression is the process of encoding information in a more compact form. A min heap is the natural data structure for this task. To build the Huffman tree, one begins by counting how often each character appears.
+
+Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Many file formats store a table of code lengths rather than the codes themselves. Data compression is the process of encoding information in a more compact form.
+
+
+Comparing Huffman with fixed length codes
+
+When the file is decompressed, the result is bit for bit identical to the original. Compressed data is typically smaller, faster to transmit, and cheaper to store. Data compression is the process of encoding information in a more compact form. A min heap is the natural data structure for this task.
+
+The two least frequent nodes are then combined into a single parent node. This merging step is repeated until only one node remains, and that node is the root. Huffman coding remains a building block inside more complex compressors such as DEFLATE.
+
+The two least frequent nodes are then combined into a single parent node. This guarantee is what makes the algorithm so useful in practice. This canonical representation is compact and can be reconstructed by both sides.
+
+
+Limitations and practical considerations
+
+The Huffman code is not always optimal for a single message, since the table must be sent too. Modern systems combine Huffman coding with a dictionary based scheme to do even better. When the file is decompressed, the result is bit for bit identical to the original. Huffman coding remains a building block inside more complex compressors such as DEFLATE. A code table is produced in which no code is a prefix of any other code.
+
+This merging step is repeated until only one node remains, and that node is the root. Lossless compression reduces the size of a file without removing any information. Data compression is the process of encoding information in a more compact form.
+
+When the file is decompressed, the result is bit for bit identical to the original. Many file formats store a table of code lengths rather than the codes themselves. The reconstruction rule depends only on the lengths, so no extra data is needed. The Huffman code is not always optimal for a single message, since the table must be sent too. Huffman coding remains a building block inside more complex compressors such as DEFLATE. Many file formats store a table of code lengths rather than the codes themselves.
+
+
+Canonical codes and compact file headers
+
+To build the Huffman tree, one begins by counting how often each character appears. To build the Huffman tree, one begins by counting how often each character appears. Modern systems combine Huffman coding with a dictionary based scheme to do even better. It does guarantee that the average code length is within one bit of the entropy. Data compression is the process of encoding information in a more compact form.
+
+Compressed data is typically smaller, faster to transmit, and cheaper to store. To build the Huffman tree, one begins by counting how often each character appears. Compressed data is typically smaller, faster to transmit, and cheaper to store. When the file is decompressed, the result is bit for bit identical to the original.
+
+Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Lossless compression reduces the size of a file without removing any information. This guarantee is what makes the algorithm so useful in practice. A code table is produced in which no code is a prefix of any other code.
+
+A code table is produced in which no code is a prefix of any other code. A code table is produced in which no code is a prefix of any other code. This guarantee is what makes the algorithm so useful in practice.
+
+
+An introduction to data compression
+
+The reconstruction rule depends only on the lengths, so no extra data is needed. A code table is produced in which no code is a prefix of any other code. Modern systems combine Huffman coding with a dictionary based scheme to do even better.
+
+To build the Huffman tree, one begins by counting how often each character appears. It does guarantee that the average code length is within one bit of the entropy. To build the Huffman tree, one begins by counting how often each character appears. Many file formats store a table of code lengths rather than the codes themselves. Data compression is the process of encoding information in a more compact form.
+
+Compressed data is typically smaller, faster to transmit, and cheaper to store. The Huffman code is not always optimal for a single message, since the table must be sent too. It does guarantee that the average code length is within one bit of the entropy. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT.
+
+Many file formats store a table of code lengths rather than the codes themselves. The two main families of compression algorithms are lossless and lossy. A code table is produced in which no code is a prefix of any other code.
+
+Lossless compression reduces the size of a file without removing any information. Data compression is the process of encoding information in a more compact form. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT.
+
+
+The Huffman algorithm in practice
+
+Data compression is the process of encoding information in a more compact form. Many file formats store a table of code lengths rather than the codes themselves. This guarantee is what makes the algorithm so useful in practice. This guarantee is what makes the algorithm so useful in practice.
+
+This canonical representation is compact and can be reconstructed by both sides. The Huffman code is not always optimal for a single message, since the table must be sent too. The central idea is that frequently occurring characters receive short binary codes. The central idea is that frequently occurring characters receive short binary codes. It does guarantee that the average code length is within one bit of the entropy.
+
+Many file formats store a table of code lengths rather than the codes themselves. Data compression is the process of encoding information in a more compact form. The reconstruction rule depends only on the lengths, so no extra data is needed. The reconstruction rule depends only on the lengths, so no extra data is needed. Compressed data is typically smaller, faster to transmit, and cheaper to store. It does guarantee that the average code length is within one bit of the entropy.
+
+
+Limitations and practical considerations
+
+Huffman coding remains a building block inside more complex compressors such as DEFLATE. A min heap is the natural data structure for this task. Data compression is the process of encoding information in a more compact form.
+
+Modern systems combine Huffman coding with a dictionary based scheme to do even better. A min heap is the natural data structure for this task. The two least frequent nodes are then combined into a single parent node.
+
+The two least frequent nodes are then combined into a single parent node. Data compression is the process of encoding information in a more compact form. It does guarantee that the average code length is within one bit of the entropy. Lossless compression reduces the size of a file without removing any information. Lossless compression reduces the size of a file without removing any information.
+
+The central idea is that frequently occurring characters receive short binary codes. Data compression is the process of encoding information in a more compact form. This guarantee is what makes the algorithm so useful in practice. Compressed data is typically smaller, faster to transmit, and cheaper to store. It does guarantee that the average code length is within one bit of the entropy.
+
+
+Comparing Huffman with fixed length codes
+
+The reconstruction rule depends only on the lengths, so no extra data is needed. Modern systems combine Huffman coding with a dictionary based scheme to do even better. The two main families of compression algorithms are lossless and lossy. Data compression is the process of encoding information in a more compact form.
+
+Data compression is the process of encoding information in a more compact form. A min heap is the natural data structure for this task. The two least frequent nodes are then combined into a single parent node. The two main families of compression algorithms are lossless and lossy. A code table is produced in which no code is a prefix of any other code.
+
+The central idea is that frequently occurring characters receive short binary codes. Lossless compression reduces the size of a file without removing any information. The reconstruction rule depends only on the lengths, so no extra data is needed. A min heap is the natural data structure for this task. The Huffman code is not always optimal for a single message, since the table must be sent too. This guarantee is what makes the algorithm so useful in practice.
+
+A min heap is the natural data structure for this task. The Huffman code is not always optimal for a single message, since the table must be sent too. Lossless compression reduces the size of a file without removing any information. To build the Huffman tree, one begins by counting how often each character appears.
+
+Lossless compression reduces the size of a file without removing any information. The two main families of compression algorithms are lossless and lossy. Modern systems combine Huffman coding with a dictionary based scheme to do even better.
+
+The Huffman code is not always optimal for a single message, since the table must be sent too. The central idea is that frequently occurring characters receive short binary codes. Lossless compression reduces the size of a file without removing any information. Data compression is the process of encoding information in a more compact form. Modern systems combine Huffman coding with a dictionary based scheme to do even better.
+
+
+Comparing Huffman with fixed length codes
+
+The two least frequent nodes are then combined into a single parent node. A min heap is the natural data structure for this task. This guarantee is what makes the algorithm so useful in practice. When the file is decompressed, the result is bit for bit identical to the original. A min heap is the natural data structure for this task. To build the Huffman tree, one begins by counting how often each character appears.
+
+Many file formats store a table of code lengths rather than the codes themselves. Huffman coding remains a building block inside more complex compressors such as DEFLATE. It does guarantee that the average code length is within one bit of the entropy. Huffman coding remains a building block inside more complex compressors such as DEFLATE. The two least frequent nodes are then combined into a single parent node. The Huffman code is not always optimal for a single message, since the table must be sent too.
+
+Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Huffman coding remains a building block inside more complex compressors such as DEFLATE. Modern systems combine Huffman coding with a dictionary based scheme to do even better. To build the Huffman tree, one begins by counting how often each character appears.
+
+
+Limitations and practical considerations
+
+The reconstruction rule depends only on the lengths, so no extra data is needed. The reconstruction rule depends only on the lengths, so no extra data is needed. Lossless compression reduces the size of a file without removing any information.
+
+A min heap is the natural data structure for this task. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. This canonical representation is compact and can be reconstructed by both sides.
+
+It does guarantee that the average code length is within one bit of the entropy. The two main families of compression algorithms are lossless and lossy. The two main families of compression algorithms are lossless and lossy. Compressed data is typically smaller, faster to transmit, and cheaper to store.
+
+The two least frequent nodes are then combined into a single parent node. The Huffman code is not always optimal for a single message, since the table must be sent too. A code table is produced in which no code is a prefix of any other code. This merging step is repeated until only one node remains, and that node is the root.
+
+Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Many file formats store a table of code lengths rather than the codes themselves. The two least frequent nodes are then combined into a single parent node. Lossless compression reduces the size of a file without removing any information. When the file is decompressed, the result is bit for bit identical to the original. This canonical representation is compact and can be reconstructed by both sides.
+
+Lossless compression reduces the size of a file without removing any information. This merging step is repeated until only one node remains, and that node is the root. Many file formats store a table of code lengths rather than the codes themselves. A code table is produced in which no code is a prefix of any other code. Many file formats store a table of code lengths rather than the codes themselves. To build the Huffman tree, one begins by counting how often each character appears.
+
+
+The Huffman algorithm in practice
+
+A code table is produced in which no code is a prefix of any other code. The Huffman code is not always optimal for a single message, since the table must be sent too. A min heap is the natural data structure for this task. The reconstruction rule depends only on the lengths, so no extra data is needed. When the file is decompressed, the result is bit for bit identical to the original. This guarantee is what makes the algorithm so useful in practice.
+
+Data compression is the process of encoding information in a more compact form. Modern systems combine Huffman coding with a dictionary based scheme to do even better. The Huffman code is not always optimal for a single message, since the table must be sent too. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. The Huffman code is not always optimal for a single message, since the table must be sent too. Many file formats store a table of code lengths rather than the codes themselves.
+
+Huffman coding remains a building block inside more complex compressors such as DEFLATE. To build the Huffman tree, one begins by counting how often each character appears. The Huffman code is not always optimal for a single message, since the table must be sent too.
+
+It does guarantee that the average code length is within one bit of the entropy. Huffman coding remains a building block inside more complex compressors such as DEFLATE. A min heap is the natural data structure for this task. This canonical representation is compact and can be reconstructed by both sides. This merging step is repeated until only one node remains, and that node is the root.
+
+
+An introduction to data compression
+
+The Huffman code is not always optimal for a single message, since the table must be sent too. The Huffman code is not always optimal for a single message, since the table must be sent too. Data compression is the process of encoding information in a more compact form. This merging step is repeated until only one node remains, and that node is the root.
+
+Many file formats store a table of code lengths rather than the codes themselves. This guarantee is what makes the algorithm so useful in practice. Huffman coding was invented in 1952 by David Huffman, who was a graduate student at MIT. Lossless compression reduces the size of a file without removing any information. Data compression is the process of encoding information in a more compact form. The Huffman code is not always optimal for a single message, since the table must be sent too.
+
+The reconstruction rule depends only on the lengths, so no extra data is needed. Modern systems combine Huffman coding with a dictionary based scheme to do even better. The Huffman code is not always optimal for a single message, since the table must be sent too. The central idea is that frequently occurring characters receive short binary codes.
+
+The Huffman code is not always optimal for a single message, since the table must be sent too. This canonical representation is compact and can be reconstructed by both sides. The central idea is that frequently occurring characters receive short binary codes.
