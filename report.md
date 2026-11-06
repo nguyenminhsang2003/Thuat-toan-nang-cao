@@ -1,11 +1,14 @@
 BÀI KIỂM TRA GIỮA KỲ — MÔN THUẬT TOÁN NÂNG CAO
 
-Họ và tên: Nguyễn Minh Sáng        Lớp: 34CNTT11
+Họ và tên: Nguyễn Minh Sáng        
+
+Lớp: 34CNTT11
 
 Đề: Câu 1 — Vận dụng kiến thức Huffman Codes và Data Compression, thực
 hiện nén dữ liệu cho tệp văn bản.
 
 Phương án: tệp văn bản (.txt), ngôn ngữ Python.
+
 Mã nguồn: https://github.com/nguyenminhsang2003/Thuat-toan-nang-cao
 
 
@@ -14,18 +17,18 @@ Mã nguồn: https://github.com/nguyenminhsang2003/Thuat-toan-nang-cao
 1.1. Nguyên lý.
 
 Thuật toán Huffman nén dữ liệu không mất thông tin (lossless) theo nguyên tắc:
-ký hiệu xuất hiện càng nhiều trong văn bản thì mã càng ngắn. Ta dựng một cây
-nhị phân, mỗi lá là một ký tự của tệp, đường đi từ gốc đến lá đó chính là
+ký hiệu xuất hiện càng nhiều trong văn bản thì mã càng ngắn. Có thể dựng một
+cây nhị phân, mỗi lá là một ký tự của tệp, đường đi từ gốc đến lá đó chính là
 mã của ký tự (rẽ trái = 0, rẽ phải = 1). Bảng mã sinh ra phải có tính chất
 tiền tố (prefix-free) — không mã nào là tiền tố của mã khác — thì khi đọc
-chuỗi bit từ trái sang phải ta biết chắc chắn ký tự tương ứng, không có khả
+chuỗi bit từ trái sang phải sẽ biết chắc chắn ký tự tương ứng, không có khả
 năng nhập nhằng.
 
-Tôi nén ở mức ký tự Unicode chứ không phải byte thô. Chữ có dấu tiếng Việt
-như "ế" chiếm 2 byte trong UTF-8; nếu nén ở mức byte thì mỗi chữ bị tách
-thành 2 ký hiệu riêng biệt, cây Huffman phải dùng đủ 256 lá với tần suất
-rất phân tán, nên độ dài mã trung bình cao hơn nhiều. Ở mức ký tự, tần suất
-dồn vào tập ký hiệu phân biệt chỉ có 94 chữ (đo ở mục 3.1), và tỷ lệ nén đo
+Phương án thực hiện là nén ở mức ký tự Unicode chứ không phải byte thô. Chữ
+có dấu tiếng Việt như "ế" chiếm 2 byte trong UTF-8; nếu nén ở mức byte thì
+mỗi chữ bị tách thành 2 ký hiệu riêng biệt, số ký hiệu phân biệt nhiều hơn
+và tần suất phân tán hơn, nên độ dài mã trung bình cao hơn. Ở mức ký tự, tệp
+tiếng Việt mẫu chỉ có 94 ký hiệu phân biệt (đo ở mục 3.1) và tỷ lệ nén đo
 được là 52,15%.
 
 
@@ -93,10 +96,10 @@ một mã khớp nên giải mã luôn xác định. Vì bảng mã được nh�
 .huff nên quá trình giải nén hoàn toàn độc lập với tệp gốc — chỉ cần tệp
 .huff là đủ để khôi phục nội dung.
 
-Mã canonical: nếu lưu thẳng chuỗi mã của từng ký hiệu thì mỗi ký hiệu tốn
-khoảng 10 byte, với 94 ký hiệu thì phần đầu tệp chiếm gần 1 KB, đủ để hỏng
-tỷ lệ nén dù thuật toán hoàn toàn đúng. Vì vậy tệp chỉ lưu độ dài mã của
-mỗi ký hiệu, còn hai bên cùng tái tạo bảng mã theo một quy tắc chung:
+Mã canonical: nếu lưu thẳng chuỗi mã của từng ký hiệu vào tệp thì mỗi bit
+của mã phải tốn một byte, nên phần đầu tệp rất lớn và làm tỷ lệ nén bị hỏng
+dù thuật toán hoàn toàn đúng. Vì vậy tệp chỉ lưu độ dài mã của mỗi ký hiệu,
+còn hai bên cùng tái tạo bảng mã theo một quy tắc chung:
   - Sắp ký hiệu theo (độ dài mã tăng dần, mã điểm tăng dần).
   - Gán các số nguyên liên tiếp 0, 1, 2, ...; khi độ dài tăng từ L sang L'
     thì dịch số sang trái (L'−L) bit.
@@ -104,21 +107,22 @@ mỗi ký hiệu, còn hai bên cùng tái tạo bảng mã theo một quy tắc
 Áp dụng cho ví dụ ở mục 1.3: A (độ dài 1) → 0; B (độ dài 2) → 01; C (độ dài
 2) → 10. Độ dài giống hệt bảng theo đường đi (1, 2, 2) và vẫn prefix-free —
 khác nhau chỉ ở cách gán số, mà độ dài mới là thứ quyết định số bit dùng để
-mã hóa. Nhờ vậy phần đầu tệp chỉ tốn khoảng 3 byte/ký hiệu.
+mã hóa. Vì vậy mỗi ký hiệu chỉ còn tốn 3–4 byte trong phần đầu tệp.
 
 Cấu trúc tệp .huff:
   Magic         4 byte   chuỗi HUFF, chống ghi nhầm tệp
   version       1 byte   số phiên bản định dạng
   n_symbols     2 byte   số ký hiệu phân biệt
   pad           1 byte   số bit đệm cuối dữ liệu (0–7)
-  Bảng ký hiệu  xxxxx    ký tự + độ dài mã của ký tự đó
-  Dữ liệu       xxxxx    chuỗi bit nén đóng gói thành byte
+  Bảng ký hiệu  thay đổi ký tự + độ dài mã của ký tự đó
+  Dữ liệu       thay đổi chuỗi bit nén đóng gói thành byte
 
-Các trường hợp biên đã xử lý: chỉ một ký hiệu duy nhất thì gán mã "0" (không
-để mã rỗng); tệp rỗng thì phần đầu ghi n = 0, không có dữ liệu; số bit không
-chia hết cho 8 thì lưu số bit đệm vào phần đầu tệp; tệp .huff sai định
-dạng thì kiểm tra magic và version rồi báo lỗi rõ ràng; dòng mới trên
-Windows thì mở/ghi tệp với tham số newline="" để không bị đổi \n thành \r\n.
+Các trường hợp biên được xử lý trong chương trình: chỉ một ký hiệu duy nhất
+thì gán mã "0" (không để mã rỗng); tệp rỗng thì phần đầu ghi n = 0, không có
+dữ liệu; số bit không chia hết cho 8 thì lưu số bit đệm vào phần đầu tệp;
+tệp .huff sai định dạng thì kiểm tra magic và version rồi báo lỗi rõ ràng;
+dòng mới trên Windows thì mở/ghi tệp với tham số newline="" để không bị đổi
+\n thành \r\n.
 
 
 2. TÍNH TOÁN CÁC GIÁ TRỊ O, Ω, Θ
@@ -134,9 +138,12 @@ Duyệt cây lấy độ dài mã          Θ(n)
 Sắp xếp + tái tạo mã canonical   Θ(n log n)
 Mã hóa N ký tự + đóng gói bit    Θ(N·L)
 
-Vì bảng mã là prefix-code nên L ≤ log2 n, suy ra Θ(N·L) = Θ(N log n).
+Giải thích dòng cuối: mã hóa N ký tự sinh ra tổng N·L bit. Theo định lý
+Shannon, độ dài mã trung bình của mã Huffman thỏa L < H + 1, trong đó H là
+entropy của nguồn, và H ≤ log2 n. Suy ra L = O(log n), nên thời gian mã hóa
+là O(N log n).
 
-Tổng thời gian: T(N, n) = Θ(N) + Θ(n log n) + Θ(N log n) = Θ(N + n log n)
+Tổng thời gian: T(N, n) = Θ(N) + Θ(n log n) + O(N log n) = O(N + n log n)
 
   O(N + n log n) — cận trên.
   Ω(N) — cận dưới: bất kỳ thuật toán nén nào cũng phải đọc qua N ký tự để
@@ -144,19 +151,17 @@ Tổng thời gian: T(N, n) = Θ(N) + Θ(n log n) + Θ(N log n) = Θ(N + n log n
   Θ(N + n log n) — cận chặt khi N và n thay đổi độc lập.
 
 Trong trường hợp thực tế của bài toán: tập ký hiệu là mã điểm Unicode nên n
-có trần cố định, và trong văn bản thực tế n chỉ khoảng 30–95 (đo được 94 với
-tệp tiếng Việt) — hằng số rất nhỏ so với N. Khi đó n log n là hằng số và
-T(N) = Θ(N).
+có trần cố định, và trong các tệp mẫu n chỉ bằng 27 (tiếng Anh 44, tiếng Việt
+94) — hằng số rất nhỏ so với N. Khi đó n log n là hằng số và T(N) = Θ(N).
 
 Kết luận: O(N + n log n), Ω(N), và Θ(N) khi coi n là hằng số — tức tiệm cận
 tuyến tính theo độ dài tệp. Đây là tính chất tốt nhất có thể, vì bắt buộc
 phải đọc hết tệp.
 
-Độ phức tạp bộ nhớ: cây Huffman có 2n−1 nút, bảng độ dài mã và bảng mã tái
-tạo đều O(n) (bảng mã tính theo bit là O(n log n) bit), còn chuỗi văn bản đọc
-vào RAM chiếm O(N). Tổng O(N + n log n) — phần phụ thuộc N đến từ cách đọc
-cả tệp vào bộ nhớ một lần để đếm tần suất; bản thân thuật toán dựng cây chỉ
-cần O(n) bộ nhớ.
+Độ phức tạp bộ nhớ: cây Huffman có 2n−1 nút ⇒ O(n); bảng độ dài mã O(n); bảng
+mã tái tạo O(n log n) bit; chuỗi văn bản đọc vào RAM chiếm O(N). Tổng
+O(N + n log n) — phần phụ thuộc N đến từ cách đọc cả tệp vào bộ nhớ một lần
+để đếm tần suất; bản thân thuật toán dựng cây chỉ cần O(n) bộ nhớ.
 
 
 3. ĐÁNH GIÁ ĐỘ PHỨC TẠP THUẬT TOÁN
@@ -171,8 +176,7 @@ Các lệnh dùng để đo:
 Tệp mẫu                Gốc       Nén       Tỷ lệ nén   n    Round-trip
 Tiếng Việt có dấu      25647 B   12272 B   52,15%      94   MATCH
 Tiếng Anh              24016 B   13196 B   45,05%      44   MATCH
-Phân bố lệch            12079 B   2358 B    80,48%      27   MATCH
-(1 ký tự chiếm ~70%)
+Phân bố tần suất lệch   12079 B   2358 B    80,48%      27   MATCH
 
 Tỷ lệ nén (%) = (1 − S_nén / S_gốc) × 100
 
@@ -199,8 +203,8 @@ Tổng số bit nếu dùng mã cố định 8 bit    152640 bit (xấp xỉ 190
 
 Entropy H là số bit trung bình nhỏ nhất mà bất kỳ cách mã hóa ký hiệu nào
 cũng không thể thấp hơn. Chênh lệch L − H chỉ 0,0375 bit/ký tự — mã Huffman
-đạt gần đúng cận lý tưởng (theo định lý Shannon: H ≤ L < H + 1 khi n là lũy
-thừa của 2, H ≤ L < H + 2 nói chung).
+đạt gần đúng cận lý tưởng, và đúng như định lý Shannon đã khẳng định:
+H ≤ L < H + 1 khi n là lũy thừa của 2, H ≤ L < H + 2 nói chung.
 
 Một số dòng trong bảng mã thực tế sinh ra:
 
@@ -223,7 +227,7 @@ Huffman.
 
 3.3. Nhận xét.
 
-a) Tỷ lệ nén phụ thuộc phân bố tần suất, không phụ thuộc độ dài tệp.
+a) Tỷ lệ nén phụ thuộc mạnh vào phân bố tần suất.
 sample_skewed.txt đạt 80,48% vì tần suất tập trung mạnh vào một ký tự;
 sample_en.txt chỉ 45,05% vì bảng chữ cái Latin phân bố đều hơn, nhiều nguyên
 âm có tần suất gần bằng nhau. Tần suất càng lệch thì nén càng hiệu quả.
